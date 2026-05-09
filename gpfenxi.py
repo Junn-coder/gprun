@@ -57,7 +57,7 @@ def screen_growth_stocks():
             print(f"  -> 数据缺失，跳过")
             continue
         print(f"  -> 营收增长 {revenue_growth:.2f}%，净利增长 {profit_growth:.2f}%")
-        if profit_growth > 100 and revenue_growth > 30:
+        if profit_growth > 30 and revenue_growth > 20:
             candidates.append({
                 "code": code,
                 "name": name,
