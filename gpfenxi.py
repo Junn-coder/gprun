@@ -27,23 +27,44 @@ def get_q1_growth(stock_code):
     try:
         profit_df = ak.stock_profit_sheet_by_report_em(symbol=stock_code)
         if profit_df is None or profit_df.empty:
+            print(f"  ⚠️ {stock_code}: 无利润表数据")
             return None, None
+
         profit_df = profit_df.sort_values("报告期", ascending=False)
         if len(profit_df) < 2:
+            print(f"  ⚠️ {stock_code}: 不足两个报告期")
             return None, None
+
+        # 优先查找 2026 年 Q1 数据
         q1_current = profit_df[profit_df["报告期"].str.startswith("2026-03-31")]
-        q1_prev = profit_df[profit_df["报告期"].str.startswith("2025-03-31")]
+        # 如果没有 2026 年 Q1 数据，自动使用最新的报告期作为替代
+        if q1_current.empty:
+            print(f"  ℹ️ {stock_code}: 无2026Q1数据，使用最新报告期 {profit_df.iloc[0]['报告期']}")
+            q1_current = profit_df.head(1)
+        # 查找去年同期的数据
+        prev_year = int(q1_current.iloc[0]["报告期"][:4]) - 1
+        q1_prev = profit_df[profit_df["报告期"].str.startswith(f"{prev_year}")]
+        # 如果没有去年同期数据，就使用下一个最新的报告期
+        if q1_prev.empty and len(profit_df) > 1:
+            print(f"  ℹ️ {stock_code}: 无{prev_year}同期数据，使用下一报告期 {profit_df.iloc[1]['报告期']}")
+            q1_prev = profit_df.iloc[[1]]
         if q1_current.empty or q1_prev.empty:
+            print(f"  ⚠️ {stock_code}: 无法找到足够的数据点")
             return None, None
+
+        # 后续计算是否盈利等的代码... (保持不变)
+        # current_profit, prev_profit ... 等财务数据的提取
         current_profit = q1_current.iloc[0]["净利润"]
         prev_profit = q1_prev.iloc[0]["净利润"]
         profit_growth = (current_profit - prev_profit) / abs(prev_profit) * 100 if prev_profit != 0 else None
+
         revenue_current = q1_current.iloc[0]["营业总收入"]
         revenue_prev = q1_prev.iloc[0]["营业总收入"]
         revenue_growth = (revenue_current - revenue_prev) / abs(revenue_prev) * 100 if revenue_prev != 0 else None
+
         return revenue_growth, profit_growth
     except Exception as e:
-        print(f"获取 {stock_code} 财务数据出错: {e}")
+        print(f"❌ {stock_code}: 异常 - {e}")
         return None, None
 
 def screen_growth_stocks():
