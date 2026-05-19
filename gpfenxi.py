@@ -104,17 +104,17 @@ def screen_growth_stocks():
 
 def analyze_stock_with_myai(stock_info, api_key):
     prompt = f"""
-Please analyze the investment value of the following A-share stock, focusing on whether it has 30%-50% upside potential over the next 3-6 months:
-- Stock name: {stock_info['name']} ({stock_info['code']})
-- Sector: {stock_info['sector']}
-- Q1 net profit YoY: {stock_info['profit_growth']}%
-- Q1 revenue YoY: {stock_info['revenue_growth']}%
+请分析以下A股股票的投资价值，重点判断未来3-6个月是否具有30%-50%的上涨潜力：
+- 股票名称：{stock_info['name']}（{stock_info['code']}）
+- 所属板块：{stock_info['sector']}
+- 一季度净利润同比：{stock_info['profit_growth']}%
+- 一季度营业收入同比：{stock_info['revenue_growth']}%
 
-Output format:
-1. Core growth thesis (2-3 points)
-2. Key risks (2 points)
-3. Overall rating: A (strong buy) / B (neutral) / C (avoid)
-4. Expected 3-6 month upside range: xx%
+输出格式：
+1. 核心成长逻辑（2-3点）
+2. 主要风险（2点）
+3. 综合评级：A（强烈推荐）/ B（中性）/ C（回避）
+4. 预期3-6个月涨幅区间：xx%
 """
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -155,10 +155,10 @@ def analyze_yyg(api_key):
         log_debug(f"Failed to fetch Industrial Bank quote: {e}")
         price, change = "N/A", "N/A"
     prompt = f"""
-Latest data for Industrial Bank (601166):
-- Close price: {price}
-- Daily change: {change}%
-Considering the current low interest rate environment, the overall valuation of the banking sector, and the company's non-performing loan ratio, please provide a brief analysis and trading recommendation.
+兴业银行（601166）最新数据：
+- 收盘价：{price}
+- 当日涨跌幅：{change}%
+请结合当前低利率环境、银行板块整体估值以及公司不良贷款率，给出简要分析和操作建议。
 """
     headers = {
         "Authorization": f"Bearer {api_key}",
