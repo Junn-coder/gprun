@@ -1,6 +1,8 @@
 import os
+import sys
 import time
 import datetime
+import argparse
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -22,6 +24,18 @@ WHITELIST = [
     {"code": "301162", "name": "Guoneng Rixin",      "sector": "New Energy Digitalization"},
     {"code": "003010", "name": "Ruoyuchen",          "sector": "E-commerce Operations Transformation"},
 ]
+
+def build_whitelist(codes_csv=None):
+    """If --codes 'code,name,sector;...' is given, override WHITELIST with scanned candidates."""
+    if not codes_csv:
+        return WHITELIST
+    out = []
+    for item in codes_csv.split(";"):
+        parts = item.strip().split(",")
+        if len(parts) >= 2:
+            out.append({"code": parts[0].strip(), "name": parts[1].strip(),
+                         "sector": parts[2].strip() if len(parts) > 2 else "unknown"})
+    return out if out else WHITELIST
 
 def get_q1_growth(stock_code):
     """
@@ -77,9 +91,11 @@ def get_q1_growth(stock_code):
         log_debug(f"  [X] {stock_code}: {err_msg}")
         return None, None, "\n".join(debug_info)
 
-def screen_growth_stocks():
+def screen_growth_stocks(whitelist=None):
+    if whitelist is None:
+        whitelist = WHITELIST
     candidates = []
-    for item in WHITELIST:
+    for item in whitelist:
         code = item["code"]
         name = item["name"]
         log_debug(f"Analyzing {name} ({code}) ...")
@@ -248,6 +264,13 @@ def send_email(candidates, yyg_analysis, smtp_user, smtp_password, to_email):
     print("Email sent successfully")
 
 def main():
+    ap = argparse.ArgumentParser(description="Growth stock screener")
+    ap.add_argument("--codes", default=None,
+                    help="Override whitelist: 'code,name,sector;...' (from scan_cn.py)")
+    args = ap.parse_args()
+
+    whitelist = build_whitelist(args.codes)
+
     my_key = os.getenv("_API_KEY")
     smtp_user = os.getenv("SMTP_USER")
     smtp_pwd = os.getenv("SMTP_PASSWORD")
@@ -256,8 +279,8 @@ def main():
     if not all([my_key, smtp_user, smtp_pwd, to_email]):
         raise ValueError("Please configure _API_KEY, SMTP_USER, SMTP_PASSWORD, TO_EMAIL in GitHub Secrets")
 
-    log_debug("========== Screening started ==========")
-    candidates = screen_growth_stocks()
+    log_debug(f"========== Screening started ({len(whitelist)} stocks) ==========")
+    candidates = screen_growth_stocks(whitelist)
     log_debug(f"Screening complete, {len(candidates)} stock(s) matched")
     log_debug("========== Analyzing Industrial Bank ==========")
     yyg_analysis = analyze_yyg(my_key)
