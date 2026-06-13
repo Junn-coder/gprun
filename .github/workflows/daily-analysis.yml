@@ -9,14 +9,16 @@ on:
 jobs:
   analysis:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Clone lifchang tools (scan_cn.py)
         run: |
-          git clone --depth 1 https://github.com/${{ github.repository_owner }}/lifchang.git /tmp/lifchang
+          git clone --depth 1 https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/lifchang.git /tmp/lifchang
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
