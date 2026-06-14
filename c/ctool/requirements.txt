@@ -1,0 +1,5 @@
+# Pinned for cross-platform stability (office Ubuntu / home Windows).
+# akshare scrapes Eastmoney/Sina and changes columns between releases —
+# pin it so "works here, breaks there" doesn't happen.
+akshare==1.18.63
+pandas

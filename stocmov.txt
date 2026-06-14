@@ -1,0 +1,114 @@
+docker run -it --rm \
+  --name n8n \
+  -p 5678:5678 \
+  -e N8N_SECURE_COOKIE=false \
+  -v ~/n8n_data:/home/node/.n8n \
+  -v ~/n8n_reports:/files \
+  docker.n8n.io/n8nio/n8n
+
+http://10.10.40.189:5678/setup
+
+
+[2026-05-01] #001
+Q: let us talk about stoc topic. Can you search the websites which can provide correct stock prices and stock information?
+A: For tracking stock prices and financial information, the best website depends on your specific needs (e.g., technical analysis vs. long-term research). Here are the top recommendations:
+
+### 1. **TradingView** (Best for Charts & Technicals)
+*   **Strengths:** Industry-standard interactive charts, hundreds of indicators, and a powerful "Pine Script" for custom strategies.
+*   **Data:** Provides high-quality real-time data for most major assets.
+*   **URL:** [tradingview.com](https://www.tradingview.com)
+
+### 2. **Yahoo Finance** (Best All-In-One & Portfolio Tracking)
+*   **Strengths:** Massive database, reliable news aggregation, and the most widely used portfolio tracker.
+*   **Data:** Real-time quotes for US stocks and extensive historical data for download.
+*   **URL:** [finance.yahoo.com](https://finance.yahoo.com)
+
+### 3. **Finviz** (Best for Screening & Sector Overviews)
+*   **Strengths:** Famous for its "Heat Maps" (visualizing market performance) and a world-class stock screener.
+*   **Data:** 15-minute delayed for free users; real-time available in "Elite" version.
+*   **URL:** [finviz.com](https://finviz.com)
+
+### 4. **Google Finance** (Best for Speed & Google Sheets)
+*   **Strengths:** Completely ad-free and extremely fast. Integrates perfectly with Google Sheets via the `=GOOGLEFINANCE` function for custom trackers.
+*   **URL:** [google.com/finance](https://www.google.com/finance)
+
+### 5. **Seeking Alpha** (Best for Deep Research & Analysis)
+*   **Strengths:** Offers deep-dive articles from diverse analysts, detailed earnings call transcripts, and "Quant Ratings" for fundamental strength.
+*   **URL:** [seekingalpha.com](https://seekingalpha.com)
+
+### 6. **Investing.com** (Best for Global & Macro Data)
+*   **Strengths:** Excellent coverage of global indices, commodities, forex, and a highly reliable economic calendar.
+*   **URL:** [investing.com](https://www.investing.com)
+
+---
+**Summary for Choice:**
+- Use **TradingView** if you want to draw on charts.
+- Use **Yahoo Finance** for daily news and portfolio tracking.
+- Use **Finviz** to find new stocks based on specific criteria.
+- Use **Google Finance** for quick price checks and spreadsheet automation.
+---
+
+[2026-05-01] #002
+Q: I want to learn from you on how to buy and sell usa stock. Say, buy one good and sell high. Give me some principles on tech shares buying and selling.
+A: When investing in US tech stocks, "buy low and sell high" is the fundamental goal, but the tech sector requires
+specific principles due to its high volatility, rapid innovation cycles, and growth-oriented valuations.
+
+Here are core principles for buying and selling US tech stocks:
+
+### 1. Understand the Business, Not Just the Ticker
+*   **The Principle:** Never buy a tech company just because the stock price is rising. Understand what they build, how
+they make money (software subscriptions, hardware sales, advertising), and their "moat" (competitive advantage).
+*   **Action:** Before buying, ask: "Will this company's product be essential 5 years from now?" (e.g., cloud computing,
+AI infrastructure).
+
+### 2. Differentiate Between "Growth" and "Value" in Tech
+*   **The Principle:** Some tech companies are mature cash-cows (like Apple or Microsoft), while others are hyper-growth
+companies burning cash to gain market share.
+*   **Action:** Mature tech provides stability and buybacks/dividends. High-growth tech provides massive upside but
+carries the risk of heavy crashes if interest rates rise or growth slows. Balance both in your portfolio.
+
+### 3. The Power of "Dollar-Cost Averaging" (DCA)
+*   **The Principle:** Timing the tech market perfectly is impossible. Tech stocks can drop 20% in a week on bad news
+and recover a month later.
+*   **Action:** Instead of buying all at once, invest a set amount of money at regular intervals (e.g., buying every
+month). This ensures you buy more shares when prices are low and fewer when they are high.
+
+### 4. Watch the Macro Environment (Interest Rates)
+*   **The Principle:** Tech stock valuations are heavily tied to interest rates. When the Federal Reserve raises interest
+rates, borrowing money becomes expensive, and the future profits of growth tech companies are discounted, causing stock
+prices to fall.
+*   **Action:** Be cautious about buying heavily unprofitable tech stocks during periods of rapidly rising interest rates.
+
+### 5. Selling Principles: Have a Plan Before You Buy
+*   **The Principle:** Don't let emotions dictate when you sell. Fear causes selling at the bottom; greed causes holding
+too long at the top.
+*   **Action:**
+    *   **Take Profits:** If a stock goes on a massive run, consider selling a small portion (10-20%) to lock in gains.
+    *   **Cut Losers based on fundamentals:** Sell if the *reason* you bought the stock has fundamentally changed (e.g.,
+    losing market share to a competitor). Do not sell just because the broader market is down.
+
+### 6. Diversify Within Tech
+*   **The Principle:** The tech sector is broad. It includes semiconductors, SaaS (Software as a Service), cybersecurity,
+consumer electronics, and AI.
+*   **Action:** Don't put all your money into one niche. Spread your bets across different sub-sectors to minimize risk.
+---
+
+[2026-05-19] #003
+Topic: How to pick a hot A-share short-term leader (龙头) — filter methodology
+Summary: Six-step filter for selecting a hot A-share 短线 龙头, plus entry trigger and hard rejects.
+Theme strength comes first, then leader identification, technical setup, tape resistance, risk-reward gate, and
+rejection list. Adapted from O'Neil/Minervini frameworks to A-share 题材 trading rhythm.
+Key points:
+- Theme first, stock second: a real 题材 needs >=3 涨停 in the 板块, positive 主力 净流入, and a clear
+  政策/事件 catalyst. No theme strength means skip.
+- Identify the 龙头, not 跟风: highest 连板 count, biggest 封单 金额, earliest 涨停 时间, and known 游资
+  席位 on 龙虎榜. Buying 跟风 = providing exit liquidity to 龙头 holders.
+- Technical setup: price > 20MA with 20MA rising; 流通市值 30-150亿 sweet spot; no overhead 套牢盘 (prefer
+  历史新高 or 平台 breakout); 量价 配合 — 启动日 放量, 加速日 缩量 涨停 (一字/T字 = strongest).
+- Tape resistance: on 大盘 跌 days, does it hold green or 涨停? Strength against the tape signals 主力 锁仓.
+- Risk-reward gate: enter only if stop loss <= 4-5% (break of 启动日 low) and next target >= 10-15% (next
+  涨停 or 题材 高度新高). Otherwise pass.
+- Hard rejects: ST 股, 高位 4板以上 接力, 业绩雷 风险窗口 (财报前1周), 大股东 减持 公告, 解禁 临近.
+- Trigger: 试仓 on 涨停 回封 or 次日 低开 不破 启动日 low. Add only on 新高 + 放量. Cut on day-2
+  close red with 资金 净流出.
+---

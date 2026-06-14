@@ -1,0 +1,126 @@
+
+A stock process:
+
+Step 1 (gate): run `python tool/index.py` to check framed.md §1 Layer-1 regime (SSE / ChiNext / CSI300 vs 5/10-day
+MA + a sentiment read from the cached scan_zt CSV). It prints GREEN / AMBER / RED and saves
+share_data/index_<date>.txt; RED = stay in cash, no new entries.
+
+Step 2 (scan to 3): run `python tool/scan_cn.py --final 3` to converge today's limit-up pool to 3 candidates (one
+leader per top hot sector). It saves share_data/candidates_<date>.txt and re-uses share_data/scan_zt_<date>.csv as
+the §1B sentiment source.
+
+Step 3 (pick one): hand-pick ONE name from the 3 with cap-OK + clean structure + not already on 4+ consecutive
+boards. The scanner's #1 is usually the cap-NG sentiment thermometer (e.g. 600726), NOT the best buy — the
+cap-OK clean one usually sits at #2 or #3.
+
+Step 4 (validate history): run `python tool/cn_stock.py <code> --history` to pull/refresh share_data/price_<code>.txt
+and verify a framed.md §3 entry trigger exists (platform breakout on >=1.5x avg volume, OR pullback to 5/10-day
+MA holding on shrinking volume + green re-volume bar). No trigger = don't enter.
+
+Step 5 (size + stop): per framed.md §5A, shares = (account x 1%) / (entry - stop), capped at 20% of account. Stop =
+5-8% below entry, OR 1-2% below the structural level — whichever is CLOSER to entry; take the SMALLER of the two
+share counts (risk-sized vs cap-sized).
+
+Step 6 (probe entry): buy HALF the target shares as a probe (framed §3 scale-in); add the other half ONLY if the
+next session confirms (not weak) AND the gate is still green. No chasing, no bottom-fishing.
+
+Step 7 (record + write next-day plan): update c/chold.md with "<code> <qty> <cost>" and write the management plan
+BEFORE next open per framed §6 — stop trigger ("close < X => sell at next open"), take-profit limits at +8% and
++15%, and the "close < 5-day MA" trail to activate after gain > +10%.
+
+Step 8 (manage mechanically): each close, check the plan and act at the next open — stop touched on close = sell
+all; price >= +8% (~entry x 1.08) = scale out half; price >= +15% = scale out rest; broken limit-up that fails to
+re-seal OR close < 5-day MA = next-open exit. Never average down; max 10 trading days then clear (§4A).
+
+Step 9 (review + repeat): after close, re-run Step 1 and update c/watchlistd.md (max 6 names). Per framed §6 log
+BOTH rule violations AND missed valid entries during a green/warm-up tape — both count.
+
+===
+Gate — index.py → GREEN/AMBER/RED.
+Scan to 3 — scan_cn.py --final 3.
+Pick one — cap-OK clean structure, not the scanner's #1 thermometer.
+Validate history — cn_stock.py <code> --history + framed §3 trigger check.
+Size + stop — the 1% / 20%-cap formula.
+Probe entry — half size, add only on next-day confirmation.
+Record + write the plan — c/chold.md + the next-day instructions.
+Manage mechanically — stop / TP scale-outs / 5-MA trail / never average down.
+Review + repeat — re-run the gate, update c/watchlistd.md, log violations and missed entries.
+
+========================================================================
+ STOCK TOOLS  (tool/cn_stock.py  +  tool/us_stock.py)
+========================================================================
+
+Setup (once per machine):
+    python -m venv .venv
+    source .venv/bin/activate          # Windows: .venv\Scripts\activate
+    pip install -r tool/requirements.txt   # akshare pinned to 1.18.63
+
+Usage (same interface for both):
+    python tool/cn_stock.py 601991 600726        # latest quotes (A-share)
+    python tool/us_stock.py NVDA AMD             # latest quotes (US)
+    python tool/cn_stock.py 601991 --history     # download/refresh price_<CODE>.txt
+    python tool/us_stock.py NVDA  --history      # incremental: only fetches missing days
+    python tool/cn_stock.py 601991 --export      # dump JSON for analysis
+    python tool/cn_stock.py 601991 --history --commit   # + git add/commit/push (mobile -> GitHub)
+
+    Optional: --start YYYY-MM-DD  --end YYYY-MM-DD  (default ~2yr lookback to today)
+    Output files land in tool/share_data/price_<CODE>.txt
+
+Built-in stability:
+  - Two data sources per script with auto-fallback.
+  - Incremental cache: a failed fetch never wipes the file; re-runs add only
+    new rows.
+  - 2s spacing between tickers to stay under the throttle.
+
+Operating notes:
+  - Don't burst. Batch a few symbols; if blocked, wait ~1 min (Sina covers you).
+  - akshare is pinned so Windows and Ubuntu behave identically.
+  - Mobile: --history --commit fetches + pushes in one command (needs venv +
+    git auth set up once). Or run on a real machine and let the phone pull.
+  - US Turnover column is blank (Sina US gives volume only; Amplitude computed).
+  - CN files may mix Eastmoney/Sina rows on fallback; units aligned, header
+    reflects whichever source wrote last.
+
+========================================================================
+ CANDIDATE SCANNER  (tool/scan_cn.py)
+========================================================================
+
+What it's for: produce a ranked shortlist of hot A-share sectors + their
+leaders, so you don't pick the 6 watchlist names from thin air. It's the
+FIND step; cn_stock.py / get_history.py are the VERIFY step.
+
+Pipeline:
+    scan_cn.py            -> ranked candidates (hot sectors + leaders)
+      pick 6 (mind the flags)
+    get_history.py <code> -> download history, verify buy point + stop
+    c/watchlistd.md       -> the 6 chosen names
+    c/framed.md           -> gate / entry / manage / re-entry rules
+
+Usage:
+    python tool/scan_cn.py                  # today / most recent trading day
+    python tool/scan_cn.py --date 20260526  # a specific session
+    python tool/scan_cn.py --sleep 8        # gentler pacing
+    python tool/scan_cn.py --no-cache       # force a fresh online fetch
+    python tool/scan_cn.py --out candidates # also save share_data/candidates_<date>.txt
+
+Reading the output flags (auto-applied from framed.md):
+    市值✓  = float 50-500亿, framed.md §2 friendly band
+    市值✗  = too small (易控盘) or too large (拉不动)
+    ⚠高位  = 连板 >= 5, high-level relay risk, don't chase
+    Leaders sorted: 连板高 -> 首封早 -> 炸板少 -> 封板资金大.
+
+Anti-block design (so this PC never gets banned by Eastmoney):
+  - Only 1 network call by default (the limit-up pool stock_zt_pool_em,
+    which already carries sector + 连板 + 首封 + 封板资金).
+  - Circuit breaker: on a block it waits once, retries once, then STOPS.
+    It never enters a hammer-retry loop (that's what triggers a ban).
+  - Per-date disk cache (share_data/scan_zt_<date>.csv) -> re-runs are free.
+  - Run it AFTER market close for the truest picture.
+  - A backed-off "抓取被拒...已停止" message is correct behavior, not a bug --
+    wait a while and re-run; it'll fetch once and cache.
+
+source /home/wujun/git/lifchang/.venv/bin/activate
+
+python tool/scan_cn.py -q
+
+python cn_stock.py 002927 --history --commit

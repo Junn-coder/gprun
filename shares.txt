@@ -1,0 +1,416 @@
+[2026-05-07] #001
+Q: Search and study latest information on CBA Sec app to buy usA stock, what are the cost to sell and buy?
+A: Current CommSec (CBA) US stock fee structure, from CommSec's official Rates & Fees page:
+
+Brokerage (per trade — applies to both buy and sell):
++----------------------------------+--------------------------------------------------+
+| Account tier                     | Fee                                              |
++----------------------------------+--------------------------------------------------+
+| International Shares (standard)  | USD $5.00 or 0.12% of trade value, whichever is  |
+|                                  | greater                                          |
+| International Shares Plus        | USD $9.95 or 0.20%, whichever is greater         |
++----------------------------------+--------------------------------------------------+
+
+Examples on the standard account:
+* USD $4,166 trade -> minimum kicks in -> USD $5.00
+* USD $10,000 trade -> 0.12% -> USD $12.00
+* USD $50,000 trade -> 0.12% -> USD $60.00
+
+Foreign Exchange (FX) fee — the big one:
+* 0.55% per currency conversion (AUD <-> USD).
+* Charged on the way in when funding the trade in USD, and on the way out when selling and converting back to AUD.
+* A round-trip therefore costs ~1.10% in FX margin, on top of brokerage.
+* The Plus tier lets you hold USD locally and skip FX on subsequent trades — only worth it for frequent traders.
+
+Other CommSec-side costs:
+* Custody fee: AUD $0 (was previously charged, now waived).
+* Inactivity fee: AUD $0.
+* Real-time market data: AUD $0.
+* US regulatory pass-throughs (SEC fee on sells, FINRA TAF) — small, "at cost", typically a few cents to a few dollars.
+
+Practical takeaway:
+* Single buy from AUD on standard account: brokerage ($5 min or 0.12%) + 0.55% FX one way.
+* Round-trip (buy + sell + convert back to AUD): ~$10 brokerage + ~1.10% FX.
+* FX margin dominates total cost on small-to-mid trades. IBKR is ~0.002% FX vs CommSec 0.55%.
+
+Sources:
+* https://www.commsec.com.au/support/rates-and-fees.html
+* https://www.commsec.com.au/support/help-centre/how-to-use-commsec/what-are-commsec-s-brokerage-rates-.html
+* https://www.commsec.com.au/offer
+* https://www.finder.com.au/share-trading/commsec-share-trading-account
+* https://brokerchooser.com/broker/commsec-us-stock-trading
+
+Q: Pls calculate in AUD and tell me if I invest 5000AUD, what is total cose on one buy and one sell?
+A: Assumes AUD/USD ~= 0.65, standard International Shares account, one buy and one sell, share price flat for
+cost-only view. AUD $5,000 at 0.65 = USD $3,250 at mid-rate.
+
++-------------------------------------------------+----------------------------+-------------+
+| Step                                            | Calculation                | Cost (AUD)  |
++-------------------------------------------------+----------------------------+-------------+
+| FX in (AUD -> USD, 0.55%)                       | 5,000 x 0.55%              | $27.50      |
+| Buy brokerage (0.12% of $3,250 = $3.90 -> min)  | USD $5.00 / 0.65           | $7.69       |
+| Sell brokerage                                  | USD $5.00 / 0.65           | $7.69       |
+| US regulatory (SEC + FINRA TAF on sell, ~$0.20) | $0.20 / 0.65               | ~$0.31      |
+| FX out (USD -> AUD, 0.55%)                      | ~5,000 x 0.55% on way back | ~$27.40     |
++-------------------------------------------------+----------------------------+-------------+
+
+Total round-trip cost ~= AUD $70.60 — about 1.41% of $5,000.
+
+Breakdown by category:
+* FX margin: ~$54.90 (78% of total cost) — dominates
+* Brokerage: ~$15.40 (22%)
+* US regulatory: ~$0.30 (negligible)
+
+Sensitivity:
+* At AUD/USD = 0.60 -> total ~= AUD $71.20 (~1.42%)
+* At AUD/USD = 0.70 -> total ~= AUD $70.10 (~1.40%)
+FX rate barely moves total because the 0.55% FX fee is rate-independent and USD $5 minimums are small.
+
+How to reduce it:
+* Trade larger sizes — brokerage min becomes irrelevant once trade exceeds USD $4,167 (where 0.12% > $5).
+* International Shares Plus — hold USD between trades, pay FX once. Worth it if doing 3+ trades or long hold.
+* Compare alternatives — IBKR FX margin ~0.002% vs CommSec 0.55%; on a $5K round-trip ~$54 saved on FX alone.
+---
+
+[2026-05-07] #002
+Q: pls study vertiv holdings and I like this stock and help to summarize its features.
+A: Summary of Vertiv Holdings (NYSE: VRT) as of May 2026.
+
+What the company does:
+Vertiv designs, builds, and services the critical infrastructure inside data centres — the "picks and shovels"
+of the AI buildout. Three product pillars:
+1. Power management — UPS systems, switchgear, busways, racks, PDUs.
+2. Thermal management — air and especially liquid cooling (CDUs, rear-door heat exchangers, immersion).
+3. IT & edge infrastructure / services — integrated modular data centres, monitoring software (Liebert/Avocent
+   brands), global field-service network.
+Roughly half the business is product, half is services and integrated solutions.
+
+Why it has become an AI darling:
+* Rack power densities have exploded — normal rack ran ~10–15 kW in 2023; AI/GPU racks (NVIDIA GB200/300 era)
+  now run 120–150 kW per rack. Air can't cool that. Liquid cooling is no longer optional.
+* Vertiv was early in liquid cooling and is now the preferred engineering partner for hyperscalers (Microsoft,
+  Meta, Google, Oracle, AWS) and neoclouds (CoreWeave, Crusoe).
+* Tight NVIDIA partnership — co-designed reference architectures for GB200 NVL72 and Blackwell-class
+  deployments. Vertiv is on the BOM of most net-new AI deployments.
+* Backlog over US$15 billion as of Q1 2026 — 12–18 months of revenue visibility.
+
+2026 financial features:
++----------------------------+--------------------------------------------------------------+
+| Metric                     | 2026 guidance / status                                       |
++----------------------------+--------------------------------------------------------------+
+| Revenue                    | US$13.50–14.00 B (full year)                                 |
+| Q1 2026 EPS growth         | +83% YoY                                                     |
+| Backlog                    | >US$15 B and growing                                         |
+| Operating margin target    | ~20% now -> ~25% by 2029                                     |
+| Market cap                 | ~US$60–100 B (volatile through the year)                     |
+| Forward P/E                | ~51x (as of May 2026)                                        |
++----------------------------+--------------------------------------------------------------+
+
+Strengths (bull case):
+* Wide moat — deep hyperscaler relationships, global service footprint hard to replicate.
+* Pricing power — AI capex constrained by physical infrastructure, liquid-cooling capacity scarce.
+* Operational leverage — revenue scaling faster than fixed costs, margins expanding.
+* Aftermarket/services tail — every box installed = 10–15 years of recurring service revenue.
+
+Risks (bear case):
+* Valuation is rich. Forward P/E ~51x; Simply Wall St / GuruFocus flag it as ~129% above fair-value estimate.
+  A lot of growth is already priced in.
+* AI capex cyclicality. If hyperscaler capex slows or rationalises, VRT's earnings compress fast.
+* Customer concentration. A handful of hyperscalers drive most demand.
+* Competition intensifying. Schneider Electric, Eaton, Emerson, nVent, plus Asian players (Delta, ZTE) all
+  expanding liquid-cooling lines. First-mover lead is real but narrowing.
+* Tariff / supply-chain risk. Vertiv has flagged tariff mitigation work; if not executed, margins compress.
+* Free cash flow growth has slowed even as earnings rose — working capital tied up in inventory and project
+  execution.
+
+Peer comparison:
++------------------------------+------------------------------------------------------------+
+| Peer                         | Angle                                                      |
++------------------------------+------------------------------------------------------------+
+| Schneider Electric (SU.PA)   | Bigger, more diversified, lower growth but cheaper.        |
+| Eaton (ETN)                  | Power-management leader, more industrial, lower DC focus.  |
+| Emerson (EMR)                | Industrial-automation focus, less direct DC overlap.       |
+| nVent Electric (NVT)         | Smaller pure-play; some thermal overlap.                   |
++------------------------------+------------------------------------------------------------+
+VRT has outperformed all four over the past 12 months on the AI tailwind.
+
+Quick verdict (informational, not advice):
+Vertiv is genuinely well-positioned — one of the few public-market ways to express "AI infrastructure" without
+owning a chipmaker or a hyperscaler. Business quality is high. Two questions:
+1. Is the AI capex cycle sustainable for another 3–5 years? (Most signs say yes, but it's the central risk.)
+2. Comfortable paying ~50x forward earnings? At that multiple, modest misses can produce 30–40% drawdowns.
+
+A common approach with names like this is dollar-cost averaging in tranches rather than a single lump-sum buy,
+so FX and brokerage costs are spread across entries and timing risk is reduced on a richly-valued stock.
+
+Sources:
+* https://www.fool.com/investing/2026/05/01/data-center-demand-drove-vertivs-earnings-up-83-bu/
+* https://seekingalpha.com/article/4890719-vertiv-holdings-the-15-billion-backlog-liquid-cooling-dominance-and-the-ai-infrastructure-trade-wall-street-is-still-underpricing
+* https://simplywall.st/stocks/us/capital-goods/nyse-vrt/vertiv-holdings-co/news/how-raised-2026-guidance-and-ai-data-center-demand-at-vertiv
+* https://finance.yahoo.com/quote/VRT/key-statistics/
+* https://www.gurufocus.com/term/forward-pe-ratio/VRT
+* https://www.alphaspread.com/security/nyse/vrt/relative-valuation
+* https://www.marketbeat.com/stocks/NYSE/VRT/competitors-and-alternatives/
+---
+
+[2026-05-07] #003
+Q: you are my finanical expert and help me to get 5x or 10x profit by usa stock. I like to invest 20000AUD and
+if lose it all, that is fine. But I want to get 5x or 10x back. I have some stock experience. I think the good
+stock is that very stable price up without clear drop, specially on daily base. Then the stock will enter jump
+mode, drop 5% or 8% and jump back, but I like leave when jump mode comes. I like in stable and quick up mode.
+which vertiv show in recent 20 business day. digest my logic and support this logic if you can.
+A: Disclaimer: not a licensed financial adviser. Engaging seriously with the logic, pushing back where weak,
+pulling current data on VRT. Trade decisions are yours.
+
+Strategy logic — what's defensible:
+Description of "stable price up without clear drop, then enters jump mode" maps cleanly to a recognised
+pattern: low-volatility momentum / Stage 2 uptrend (Stan Weinstein's term). Real pattern with academic and
+practitioner backing:
+* Stocks with low realized volatility + persistent positive drift tend to keep drifting up — the low-vol
+  anomaly is one of the most robust factor effects in equity research.
+* "Jump mode" = trend exhaustion / increased dispersion — usually a sign easy money is over and the stock is
+  being fought over by bulls and bears.
+* Exiting when realized volatility rises sharply is a real risk-management rule used by trend-following
+  systems (ATR-based stops, Bollinger-band-width expansion).
+The instinct is sound. Where it goes wrong is execution.
+
+Pushback:
+1. 5x–10x on $20K AUD bet in US large-caps is essentially impossible in any reasonable timeframe.
+   * 5x return on Vertiv from ~US$340 -> VRT > US$1,700 -> market cap ~US$650 B (Tesla / Berkshire territory).
+     Possible eventually, not in 1–3 years.
+   * 10x = market cap ~US$1.3 T (Apple / Microsoft territory). Not on a retail-investor timeframe.
+   * 5–10x outcomes live in three places: small/micro-cap stocks (sub-$2B, asymmetric tech/biotech), leveraged
+     options (call options 6–18mo expiry), or leveraged ETFs during a strong trend (TQQQ, SOXL — but
+     compound-decay risk).
+   If real goal is 5–10x, Vertiv is the wrong vehicle. Great "AI infrastructure" exposure, but $60–100 B
+   market cap and 51x P/E cap upside at probably 1.5–3x over a few years.
+
+2. Exit rule ("leave when jump mode comes") is the hardest part.
+   * False signals: 5–8% pullback in a healthy uptrend is normal. Exit on every wobble = whipsawed out.
+   * Re-entry problem: once out, when do you get back in? Most don't, and miss the move.
+   * Tax + transaction friction: every CommSec round-trip = ~1.4% in FX + brokerage. Three round-trips on a
+     $5K position = ~4% gone.
+   Pattern recognition is real, but discipline to define "jump mode" in advance with a numeric rule (e.g.
+   "exit if 20-day realised vol > 50% above its 60-day average" or "exit if a daily candle closes below
+   20-day EMA on volume > 2x average") is what separates winners from losers.
+
+Does VRT fit "stable quick up" criteria recently?
+Last ~20 business days:
+* VRT closed ~US$341 on May 5, 2026 — up ~28% in past month.
+* Hit all-time high ~US$332 on May 1, then pushed higher.
+* Notable wobble: April 22 earnings — strong report (sales +30%, EPS guidance raised) but stock initially
+  traded down before recovering.
+Verdict: VRT broadly fits "stable up" pattern in last 20 days, with one earnings-day jolt. But the move has
+been so strong it's already in late-stage momentum territory — when a stock runs +28% in a month, the next
+5–8% pullback is not a small wobble, it can be 15–20%. Buying near peak euphoria.
+Cleanest "stable up" patterns to enter are early in a base breakout, not after a +28% month.
+
+Honest take for a friend in this position:
+1. Don't put it all in one stock. Spread across 4–6 names.
+2. For 5–10x targets, look at smaller, earlier-stage AI-infrastructure plays — ALAB, CRDO, Vertiv-adjacent
+   thermal/power small caps, speculative neocloud-exposed names. Higher zero risk, real 5–10x potential.
+3. If really like Vertiv, consider call options (LEAPS, 12–18mo OTM) — 5–10x exposure on a 30–40% move in
+   underlying. But sideways drift = decay to zero. Options are right tool for "asymmetric upside, accept
+   total loss"; common stock isn't.
+4. Define exit rule numerically before entering. Mechanical, not emotional.
+5. Journal every trade. After 6 months you'll know whether pattern recognition is real edge or hindsight bias.
+
+Sources:
+* https://finance.yahoo.com/quote/VRT/
+* https://finance.yahoo.com/quote/VRT/history/
+* https://www.macrotrends.net/stocks/charts/VRT/vertiv-holdings/stock-price-history
+* https://www.wallstreetzen.com/stocks/us/nyse/vrt
+
+Q: I will study on your information which is great. let me complete my idea: yes, not stick to one stock. What
+I want is 1) a stock in strong up mode and I stay there until it is in jump mode; then I change to another
+stock which in strong up mode. I current think vrt is almost in strong up mode since I get 9% in less than five
+days. You job is tell me when the stock is in jump mode and I will leave and help me find anohter strong up
+mode stock. That is all. What are your thought?
+A: Refined idea is much sounder — single-name momentum rotation, legitimate strategy with decades of academic
+support (cross-sectional momentum, Jegadeesh & Titman 1993; AQR's momentum work). Done with discipline, can
+compound aggressively.
+
+Strengths:
+* Never married to a name — capital flows to whatever is actually working.
+* "Strong up + low chop" is exactly the regime where momentum has its highest Sharpe ratio.
+* Exiting on regime change avoids worst drawdowns.
+
+Structural challenges to accept:
+* Whipsaws are inevitable. Long-run momentum strategies typically lose money on ~40–45% of trades; winners
+  are larger than losers.
+* Tax / transaction drag: each rotation ~1.4%. Six rotations/year = ~8% lost to friction. Strategy needs to
+  clear that hurdle first.
+* Catching the next mover is the hard part — not exiting. Always 50 stocks "in strong uptrend" at any time;
+  picking the right one is where rotation strategies fail. Need clear definition of "strong up mode" so we
+  screen mechanically.
+* 5–10x compound goal: doubling once a year is excellent. 5x = ~3 years of perfect doubling, 10x = ~5 years.
+
+What I can/cannot do:
+Honest limits:
+* No real-time market data feed. Rely on web searches/fetches — delayed and noisy.
+* Can't watch market intraday. Only check when asked.
+* Can't say "sell now" in real-time. By the time you read my answer, price has moved.
+What I can usefully do (end-of-day or weekly):
+1. Pull recent price + volume data for held stock.
+2. Compute indicators defining "jump mode" — realised volatility, distance from MAs, RSI, ATR expansion.
+3. Compare today's reading to pre-defined exit rule, give yes/no with numbers.
+4. Screen for new "strong up mode" candidates by pulling 1m/3m momentum leaders, filter low-vol uptrends.
+5. Track trade journal in shares.txt for real record to learn from.
+What I won't do: tell you to buy/sell without numeric rule; pretend edge I don't have; cheerlead a stock you
+own (job is to be your check, not confirmation bias).
+
+Concrete proposal — define rules now:
+"Strong up mode" entry rules (all must be true):
+* Price above 20-day EMA.
+* 20-day EMA above 50-day EMA.
+* Last 20 trading days: positive return >= +10%.
+* Realised 20-day volatility < 50% annualised.
+* No daily drop > 5% in last 20 days.
+
+"Jump mode" exit rules (any one triggers exit):
+* Daily realised range (high-low) > 2x the 20-day ATR.
+* Single-day close-to-close drop > 6%.
+* Close below the 20-day EMA on volume > 1.5x the 20-day average.
+* 5-day realised volatility doubles vs prior 20-day average.
+
+Draft numbers — refine to taste. Tighter rules = more whipsaws but smaller drawdowns; looser = bigger gains
+but uglier exits.
+
+On VRT "9% in 5 days":
+9% gain in 5 days is good momentum, but by itself doesn't confirm "strong up mode" under disciplined
+definition. Might be the start of jump mode — sharp 5-day rips often precede chop. Need to check: range
+expanding or steady? Volume rising on up days only or also down? Stretched above 20-day EMA (>10% = stretched)?
+
+Three asks to operate as rotation co-pilot:
+1. Confirm rule set (or modify numbers).
+2. Commit to discipline — when rule triggers, you act. No "let me wait one more day".
+3. Check in regularly — daily after US close (~7am AEST) or at minimum weekly. Doesn't work if I only hear
+   from you once a month.
+If agreed:
+* I run rule-check on VRT today, give numbers.
+* If VRT passes "strong up mode", entry validated (or hold).
+* I screen 10–20 candidate names for next rotation so shortlist is ready when VRT exits.
+---
+
+[2026-05-07] #004
+Q: Log the strong up mode rules and the 3 candidate stocks (summary).
+A: Summary of the unified strategy framework and the screen results from 2026-05-07.
+
+Strong Up Mode -- single rule set (entry AND hold):
+A stock is in Strong Up Mode if ALL five rules below are true. If any rule fails on a daily
+close, exit at next session open. No discretion, no "wait one more day."
+
++----+--------------------------------------------------+--------------------------------+
+| #  | Rule                                             | Threshold                      |
++----+--------------------------------------------------+--------------------------------+
+| 1  | Price above 20-day EMA                           | Close > 20-day EMA             |
+| 2  | 20-day EMA above 50-day EMA                      | 20-EMA > 50-EMA                |
+| 3  | 20-day return                                    | >= +10%                        |
+| 4  | Realised 20-day volatility (annualised)          | < 70%                          |
+| 5  | Daily drops in last 20 days                      | None > 6%, max one in 5-6%     |
++----+--------------------------------------------------+--------------------------------+
+
+Check cadence: daily after US close (~7am AEST).
+
+Rule check on candidates (window Apr 9 - May 6, 2026):
+
++--------+----+----+----+---------+---------+--------+-------------------------------------+
+| Stock  | R1 | R2 | R3 | 20d ret | R4 vol  | R5 max | Verdict                             |
++--------+----+----+----+---------+---------+--------+-------------------------------------+
+| VRT    | OK | OK | OK | +28%    | 50%     | -5.4%  | PASS 5/5 (one 5-6% drop allowed)    |
+| INTC   | OK | OK | OK | +83%    | 103%    | -4.1%  | FAIL on vol - jump mode, exclude    |
+| GEV    | OK | OK | OK | +19.5%  | 56%     | -2.8%  | PASS 5/5                            |
+| PWR    | OK | OK | OK | +36.3%  | 57%     | -1.4%  | PASS 5/5 (cleanest tape)            |
+| ETN    | OK | OK | NO | +9.3%   | 33%     | -2.7%  | 4/5 - narrow miss on rule 3         |
++--------+----+----+----+---------+---------+--------+-------------------------------------+
+
+Three picks (all data-centre power/infrastructure theme):
+* PWR (Quanta Services) -- primary; strongest momentum, cleanest downside.
+* GEV (GE Vernova)      -- secondary; strong trend with larger but contained swings.
+* ETN (Eaton)           -- watch; cleanest by vol but 0.7% short of +10% threshold.
+                           Qualifies on next up-day.
+
+Theme concentration warning: VRT (held), GEV, PWR, ETN are all data-centre power/infra
+plays. Same bet four times = no diversification. Worth at least one rotation candidate
+from a different sub-theme (AI silicon, networking, optics) when next rotation comes.
+
+INTC explicitly excluded: 103% annualised vol = textbook jump mode, exactly the regime
+the rule set is designed to keep out.
+---
+
+[2026-05-07] #005
+Q: Log the cloud routine design (daily health check on 4 stocks).
+A: Plan agreed for a daily Strong-Up-Mode health-check routine. Routine not yet built --
+this entry captures the spec for when PAT is provided.
+
+Watchlist (4 stocks): VRT, PWR, GEV, ETN
+Cadence: daily 7am AEST, Tuesday-Saturday (after US close).
+Output: append one entry per day to check_health.txt at repo root of
+        github.com/Junn-coder/tech_discussions (same repo as this folder).
+Execution: Mode A -- remote cloud routine, runs independent of any laptop.
+Agent role: report data only. No verdict, no buy/sell recommendation.
+
+Daily entry format:
+
++--------+--------+---------+----------+----------+-----------+--------+--------+
+| Stock  | Close  | 20d ret | Vol(ann) | Max drop | DropsLast5| News   | Health |
++--------+--------+---------+----------+----------+-----------+--------+--------+
+| VRT    | $XXX   | +XX%    | XX%      | -X.X%    |   N       | clean  | NN     |
+| PWR    | $XXX   | +XX%    | XX%      | -X.X%    |   N       | clean  | NN     |
+| GEV    | $XXX   | +XX%    | XX%      | -X.X%    |   N       | clean  | NN     |
+| ETN    | $XXX   | +XX%    | XX%      | -X.X%    |   N       | clean  | NN     |
++--------+--------+---------+----------+----------+-----------+--------+--------+
+News notes: short bullet per stock when something flagged.
+
+Health score (0-100), max 100:
++---------------------------------------+--------+
+| Component                             | Points |
++---------------------------------------+--------+
+| R1: price > 20-day EMA                |   15   |
+| R2: 20-EMA > 50-EMA                   |   15   |
+| R3: 20-day return >= +10%             |   15   |
+| R4: realised vol < 70% annualised     |   15   |
+| R5: no daily drop > 6%, max 1 in 5-6% |   15   |
+| News / risk score (clean = 10)        |   10   |
+| Trend strength bonus (clean uptrend)  |   15   |
++---------------------------------------+--------+
+Reading: 90+ very strong, 70-89 strong, 50-69 caution, <50 likely exit.
+
+DropsLast5 column = count of single-day drops > 6% in last 5 trading days.
+Personal jump-mode rule (Jun): when DropsLast5 >= 2, exit the stock.
+
+News sources scanned daily: Yahoo Finance, Seeking Alpha, Google News (per ticker).
+Headline scan only -- looks for keywords: lawsuit, fraud, downgrade, miss, recall,
+scandal, investigation, SEC, layoff, etc. No flags = 10/10 news score.
+
+GitHub access required to build routine:
+* Repo: github.com/Junn-coder/tech_discussions (private; same as local folder)
+* Branch: main
+* Credential: fine-grained PAT scoped to this repo only, Contents = Read & Write
+* PAT attached to routine as encrypted secret (server-side, not laptop-local)
+* Recommended option: fresh PAT just for this routine -- easier rotation/revoke
+
+Cost expectation: ~AUD $4-10/month in agent token cost (4 fetches + news + commit).
+
+Routine NOT created yet -- waiting on user to provide PAT.
+---
+
+[2026-05-11] #006
+Q: Can you search 3 USA high stocks which double the price in the latest 3 months? Let me know the names.
+A: J, here are 3 US stocks that more than doubled in the latest 3 months (as of May 2026):
+
+1. MGRT -- up ~+985% over the past 3 months (also +1,817% YTD).
+2. ONEG -- up ~+338% over the past 3 months.
+3. MXL  -- up ~+300% over the past 3 months.
+
+Honorable mentions from March 2026's monthly leaders: ANTX (+217%), TLYS (+193%), PLYX (+163%).
+
+Note: these are highly volatile small/micro-cap movers -- extreme gains often come with extreme risk.
+Verify on a live quote before acting.
+
+Sources:
+- Best Performing Stocks of 2026 - YTD Gainers (Stocktitan): https://www.stocktitan.net/rankings/stock-gains-ytd/2026
+- Top Stock Gainers In The Past 3 Months (TipRanks): https://www.tipranks.com/markets/top-gainers/3-month
+- Best Performing Stocks in April 2026 (Stocktitan): https://www.stocktitan.net/rankings/stock-gains-monthly/2026/april
+- Best Performing Stocks in March 2026 (Stocktitan): https://www.stocktitan.net/rankings/stock-gains-monthly/2026/march
+---
