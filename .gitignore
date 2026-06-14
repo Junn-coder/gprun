@@ -1,2 +1,13 @@
 .venv/
 __pycache__/
+**/__pycache__/
+share_data/
+**/share_data/
+c/ctool/break_data/
+c/ctool/break_data_40/
+c/ctool/break_data_total/
+c/ctool/flat_data/
+c/ctool/all_stock_history_ak.csv
+tool/
+u/ushare_data/price_*.txt
+u/utool/__pycache__/
