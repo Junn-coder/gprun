@@ -23,13 +23,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r /tmp/lifchang/c/ctool/requirements.txt 2>/dev/null || true
+          pip install -r c/ctool/requirements.txt
 
-      - name: Run lifchang pipeline → email watchlistd
-        run: |
-          export PYTHONPATH="/tmp/lifchang/c/ctool:$PYTHONPATH"
-          python gpfenxi.py
+      - name: Run daily scan → email watchlistd
+        run: python c/ctool/send_watchlist.py
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
