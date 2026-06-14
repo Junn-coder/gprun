@@ -41,6 +41,8 @@ def run_scan():
     out, err, rc = run("python scan_cn.py")   # full output, not --final 3
     top3 = []
     backups = []
+    top3_codes = set()
+    current_sector = ""
     in_table = False
     in_leader = False
     for line in out.split("\n"):
@@ -60,6 +62,7 @@ def run_scan():
                     "first": parts[5], "brk": parts[6],
                     "cap_str": parts[8], "flags": flags,
                 })
+                top3_codes.add(parts[1])
         if in_table and not line.strip():
             in_table = False
 
@@ -69,19 +72,19 @@ def run_scan():
             in_table = False
             continue
         if in_leader and line.strip().startswith("* "):
-            in_leader = True
+            current_sector = line.strip()[2:]
             continue
         if in_leader and "code" in line and "name" in line:
             continue
-        if in_leader and line.strip().startswith(("2", "3", "4", "5", "6", "7", "8", "9")) and not line.strip().startswith("202"):
+        if in_leader and len(line.strip()) > 0 and line.strip()[0].isdigit() and not line.strip().startswith("202"):
             parts = line.split()
             if len(parts) >= 7:
                 code = parts[0]
-                if code not in {c["code"] for c in top3} and code.isdigit() and len(code) == 6:
+                if code not in top3_codes and code.isdigit() and len(code) == 6:
                     backups.append({
                         "code": code,
                         "name": parts[1],
-                        "sector": "?",  # will be set below
+                        "sector": current_sector,
                         "boards": int(parts[2]) if parts[2].isdigit() else parts[2],
                         "first": parts[3] if len(parts) > 3 else "?",
                         "brk": parts[4] if len(parts) > 4 else "?",
@@ -90,19 +93,7 @@ def run_scan():
                         "flags": " ".join(parts[7:]) if len(parts) > 7 else "",
                     })
         if in_leader and not line.strip():
-            in_leader = False
-
-    # Tag backup sector from context
-    current_sector = ""
-    for line in out.split("\n"):
-        if line.strip().startswith("* "):
-            current_sector = line.strip()[2:]
-        elif current_sector:
-            for b in backups:
-                if b.get("sector") == "?":
-                    parts = line.split()
-                    if parts and parts[0] == b["code"]:
-                        b["sector"] = current_sector
+            current_sector = ""
 
     print(f"  top3: {len(top3)}, backups: {len(backups)}")
     return top3, backups
