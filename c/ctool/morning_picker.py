@@ -166,7 +166,8 @@ def main():
     print("="*80 + "\n")
 
     # Load all stocks from stock_history_ak (updated daily by downa.py)
-    stock_files = sorted(glob.glob('stock_history_ak/*.csv'))
+    tool_dir = os.path.dirname(os.path.abspath(__file__))
+    stock_files = sorted(glob.glob(os.path.join(tool_dir, 'stock_history_ak', '*.csv')))
 
     print(f"Scanning {len(stock_files)} stocks...")
 
