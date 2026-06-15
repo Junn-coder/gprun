@@ -226,8 +226,36 @@ def main():
 
     print(f"✓ Results saved to morning_picks.txt\n")
 
+    # Write section for cwatch.md
+    write_cwatch_section(scores[:3])
+
     # Send email if SMTP configured
     send_email(scores[:3])
+
+
+def write_cwatch_section(top3):
+    """Write prebreak section markdown to be appended to cwatch.md."""
+    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    section = f"""---
+## Pre-Break Signal Picks ({date_str})
+
+Scored 948 stocks on 5 pre-break signals. Top 3:
+
+| # | Code | Score | Price | Signals |
+|---|------|-------|-------|---------|
+"""
+    for i, item in enumerate(top3, 1):
+        signals = ", ".join(
+            f"{name}:{val:.0f}"
+            for name, val in sorted(item['details'].items(), key=lambda x: x[1], reverse=True)
+        )
+        section += f"| {i} | {item['code']} | {item['score']:.0f}/100 | ¥{item['price']:.2f} | {signals} |\n"
+
+    section += "\n"
+    out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'prebreak_section.md')
+    with open(out_path, 'w') as f:
+        f.write(section)
+    print(f"Prebreak section written to {out_path}")
 
 
 def send_email(top3):
