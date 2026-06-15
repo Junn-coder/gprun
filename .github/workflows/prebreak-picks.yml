@@ -1,0 +1,39 @@
+name: Pre-Break Stock Picks
+
+on:
+  schedule:
+    # 北京时间下午 16:30 执行（UTC 08:30），收盘后 1.5h 确保数据已更新
+    - cron: '30 8 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  prebreak:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout prebreak branch
+        uses: actions/checkout@v5
+        with:
+          ref: prebreak
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r c/ctool/requirements.txt
+
+      - name: Download latest market data (incremental)
+        run: python c/ctool/downa.py
+
+      - name: Run pre-break scanner → top 3 picks
+        run: python c/ctool/morning_picker.py
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
