@@ -244,7 +244,7 @@ def send_email(md_body):
     msg.attach(MIMEText(html, "html", "utf-8"))
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
         server.starttls()
-        server.login(smtp_user, smtp_password)
+        server.login(smtp_user, smtp_pwd)
         server.sendmail(smtp_user, to_email, msg.as_string())
     print("Email sent.")
 
