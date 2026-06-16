@@ -33,11 +33,13 @@ VIX: X.X   SPY: $X vs 50MA $X   分布日(25d): X/25
 
 ## A 类入场卡
 
-> TICKER — Name, Sector
+(每只标注两个方向: 突破买入 / 回踩买入)
+
+> TICKER — Name, Sector  [← 最接近触发 标注]
 >
-> 入场触发: [breakout / pullback / wait]
+> 突破买入: [breakout above $X pivot, vol ≥1.5x 20d avg]  入场 $X  止损 $X (-X%)
 >
-> 入场价: $X   止损: $X (-X%)
+> 回踩买入: [pullback to 50MA $X, hold + bullish candle + above-avg vol]  入场 $X-$X  止损 $X (-X%)
 >
 > 仓位: X 股 @ $X ≈ $X,XXX (A档 ≤30% / B档 ≤20%)
 >
