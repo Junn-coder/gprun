@@ -57,7 +57,9 @@ from utrend import load
 
 # --- tunables ---
 PIVOT_LOOKBACK = 40
-VOL_MULT = 1.5
+VOL_MULT = 1.5            # minimum volume ratio (vs 20d avg)
+MAX_VOL_MULT = 5.0        # maximum volume ratio (>=5.0x = 0% win rate exhaustion; 3.0x cutoff kills too many winners)
+MAX_DIST_MA50 = 40.0      # max distance from 50MA in % (5-15% ideal; 25% cutoff kills strong-trend winners, keep 40%)
 STOP_PCT = 0.08
 MAX_HOLD = 60
 ROUNDTRIP_COST = 0.002   # 0.2% sensitivity only
@@ -82,7 +84,14 @@ def breakout_signal(df, i):
     r = df.iloc[i]
     if not uptrend(r) or pd.isna(r.PIVOT) or pd.isna(r.VOL20):
         return False
-    return (r.Close > r.PIVOT) and (r.Volume >= VOL_MULT * r.VOL20)
+    # volume: must be >= min AND <= max (exhaustion filter)
+    vol_ok = VOL_MULT * r.VOL20 <= r.Volume <= MAX_VOL_MULT * r.VOL20
+    # distance from 50MA: must be within sweet spot
+    dist_ok = True
+    if pd.notna(r.MA50) and r.MA50 > 0:
+        dist_pct = (r.Close - r.MA50) / r.MA50 * 100
+        dist_ok = dist_pct <= MAX_DIST_MA50
+    return (r.Close > r.PIVOT) and vol_ok and dist_ok
 
 
 def pullback_signal(df, i):
@@ -193,8 +202,8 @@ def main():
 
     print("=" * 64)
     print(f" 入场对照回测  {len(files)} 只标的  (近 ~2 年日线)")
-    print(f" 参数: pivot={PIVOT_LOOKBACK}日高, 量≥{VOL_MULT}×20日, 止损-{STOP_PCT*100:.0f}%, "
-          f"趋势出场 close<50MA, 时间上限 {MAX_HOLD} 日")
+    print(f" 参数: pivot={PIVOT_LOOKBACK}日高, 量{VOL_MULT}-{MAX_VOL_MULT}×20日, 距50MA≤{MAX_DIST_MA50}%, "
+          f"止损-{STOP_PCT*100:.0f}%, 趋势出场 close<50MA, 时间上限 {MAX_HOLD} 日")
     print("=" * 64)
     print(" 每标的信号数 (突破 / 回踩):")
     for t, nb, np_ in per_ticker:
