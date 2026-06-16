@@ -4,5 +4,7 @@
 
 002085 1800 13.61
 
+301387 200 120.60
+
 ---
-Realized P&L: -¥857 (2 closed, 1 open)
+Realized P&L: -¥857 (2 closed, 2 open)
