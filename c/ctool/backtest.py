@@ -137,8 +137,8 @@ def main():
         lines.append("")
         lines.append("By score bucket (does scoring add value?):")
         lines.append(f"  {'bucket':<10}{'n':>5}{'hit%':>8}{'avg%':>9}")
-        buckets = [("score>=80", 80, 1e9), ("70-79", 70, 80),
-                   ("60-69", 60, 70), ("45-59", 45, 60)]
+        buckets = [("60(capped)", 60, 1e9), ("45-59", 45, 60),
+                   ("30-44", 30, 45), ("13-29", 13, 30)]
         for label, lo, hi in buckets:
             grp = [r["ret"] for r in graded if lo <= r["score"] < hi]
             if grp:

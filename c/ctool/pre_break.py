@@ -127,7 +127,7 @@ def is_trading_day(d: pd.Timestamp, df_index) -> bool:
 def scan_day(target_date: str, meta: dict, verbose: bool = True) -> list[dict]:
     """
     Scan all qualifying stocks for a single target_date with the momentum gates.
-    Returns up to TOP_N candidate dicts, ranked by 20-day momentum (mom20) desc.
+    Returns up to TOP_N candidate dicts, ranked by capped mom20 score desc.
     """
     target_dt = pd.Timestamp(target_date)
     lookback_start = target_dt - pd.Timedelta(days=LOOKBACK_DAYS * 3)  # wide enough for 250d high
@@ -193,12 +193,14 @@ def scan_day(target_date: str, meta: dict, verbose: bool = True) -> list[dict]:
         if close >= prev_close * limit:
             continue
 
+        # Capped score: mom20 > 60 gets no extra rank credit (worst returns observed at ≥80)
+        cap_score = min(mom20, 60.0)
         candidates.append({
             "code": code,
             "name": info["name"],
             "industry": info["industry"],
             "close": close,
-            "score": round(mom20, 1),          # rank key; kept named 'score' for downstream tools
+            "score": round(cap_score, 1),     # rank key; capped at 60 (sweet spot 45-59 per backtest)
             "mom20": mom20,
             "mom5": mom5,
             "pct_from_high250": pct_from_high250 if have_250 else None,
@@ -211,7 +213,7 @@ def scan_day(target_date: str, meta: dict, verbose: bool = True) -> list[dict]:
         print(f"  Done: {processed} stocks, {len(candidates)} passed gates "
               f"({time.time() - t0:.1f}s)", file=sys.stderr)
 
-    candidates.sort(key=lambda x: x["mom20"], reverse=True)
+    candidates.sort(key=lambda x: x["score"], reverse=True)
     return candidates[:TOP_N]
 
 
