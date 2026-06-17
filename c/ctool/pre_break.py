@@ -213,7 +213,8 @@ def scan_day(target_date: str, meta: dict, verbose: bool = True) -> list[dict]:
         print(f"  Done: {processed} stocks, {len(candidates)} passed gates "
               f"({time.time() - t0:.1f}s)", file=sys.stderr)
 
-    candidates.sort(key=lambda x: x["score"], reverse=True)
+    # Primary: capped score. Secondary: vol_ratio20 (volume confirmation, 1.4x lift per winner_study)
+    candidates.sort(key=lambda x: (x["score"], x["vol_ratio20"]), reverse=True)
     return candidates[:TOP_N]
 
 
