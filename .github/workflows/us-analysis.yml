@@ -6,6 +6,9 @@ on:
     paths:
       - 'u/.trigger'
 
+permissions:
+  contents: write
+
 jobs:
   us-analysis:
     runs-on: ubuntu-latest
