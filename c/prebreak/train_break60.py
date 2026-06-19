@@ -28,6 +28,10 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 
+_CTOOL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ctool")
+if _CTOOL_DIR not in sys.path:
+    sys.path.insert(0, _CTOOL_DIR)
+
 from build_turn_dataset import build_one, load_mcap, HISTORY_DIR
 from train_break import report, HIGH, LOW
 
