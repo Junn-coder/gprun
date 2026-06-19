@@ -4,10 +4,12 @@ Background (read first, treat as my rules — don't re-derive them):
 - steps.md       — the step order (gate → scan → validate → size → manage)
 Read hota.md, framed.md, and chold.md and follow them in profit-seeking / offensive mode.
 
-Tools (RUN them, don't reason from memory; they hit akshare online):
+Tools (RUN them, don't reason from memory):
 - ctool/index.py            — Layer-1 gate (GREEN/AMBER/RED: RED=空仓, AMBER=退潮2槽)
 - ctool/scan_cn.py --final 3 — converge limit-up pool to 3 candidates (1 per hot sector)
-- ctool/cn_stock.py <code> --history — price history to validate entry + set stop
+- ctool/cn_stock.py <code> --history — download/refresh cached price history (needs akshare, one-time)
+- ctool/ca.py <code> --cost <price> — analyze from cached data: MAs, ATR, Stage, swing points, P&L (NO akshare)
+  Workflow: cn_stock.py --history once → ca.py repeatedly. Prefer ca.py for all analysis.
 
 After running tools, write the output to c/watchlistd.md in this EXACT format:
 
