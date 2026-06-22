@@ -59,7 +59,7 @@ def load_symbols_from_csv(path, limit=None):
 
 
 def extract_codes_from_md(filepath):
-    """Extract 6-digit stock codes from a markdown file (chold.md / watchlistd.md)."""
+    """Extract 6-digit stock codes from a markdown file (chold.md)."""
     import re
     codes = set()
     try:
@@ -271,13 +271,12 @@ def cmd_stocks(codes, out_json=False, sleep_sec=5, with_lhb=False):
 
 
 def cmd_watchlist(out_json=False, sleep_sec=5, with_lhb=False):
-    """Check northbound for stocks in chold.md and watchlistd.md."""
+    """Check northbound for stocks in chold.md."""
     codes = set()
-    for fname in ["chold.md", "watchlistd.md"]:
-        path = os.path.join(os.path.dirname(HERE), fname)
-        codes.update(extract_codes_from_md(path))
+    path = os.path.join(os.path.dirname(HERE), "chold.md")
+    codes.update(extract_codes_from_md(path))
     if not codes:
-        print("No stock codes found in chold.md or watchlistd.md")
+        print("No stock codes found in chold.md")
         return
     print(f"Watchlist: {len(codes)} stocks ({', '.join(sorted(codes))})\n")
     cmd_stocks(sorted(codes), out_json=out_json, sleep_sec=sleep_sec, with_lhb=with_lhb)
@@ -369,7 +368,7 @@ Examples:
     )
     sub = parser.add_mutually_exclusive_group()
     sub.add_argument("--watchlist", action="store_true",
-                     help="Check stocks from chold.md + watchlistd.md")
+                     help="Check stocks from chold.md")
     sub.add_argument("--scan", action="store_true",
                      help="Scan full hot_a_stocks.csv universe")
     parser.add_argument("codes", nargs="*", help="Stock code(s), e.g. 000158 002607")

@@ -460,7 +460,7 @@ would be LOWER than simulated, possibly zero or negative.
 |----------|-------|-----|
 | ~~1~~ | ~~Phase B (ATR)~~ ✅ | Completed 2026-06-11 — unified to 1.0× all boards |
 | ~~2~~ | ~~Phase A (Gate)~~ ✅ | Completed 2026-06-11 — gate validated, AMBER relaxed |
-| ~~3~~ | ~~Phase C (Time stop)~~ ✅ | Completed 2026-06-11 — day-3/5 at +2% kept, borderline but passes |
+| ~~3~~ | ~~Phase C (Time stop)~~ ✅ | Completed 2026-06-11 — day-5 +2% (recalibrated from day-3 2026-06-13) |
 | ~~4~~ | ~~Phase D (Expectancy)~~ ✅ | Completed ATR recalibration 2026-06-11 — 53% win, +¥32K net, all §6 targets passed |
 | ~~5~~ | ~~Phase E (5+ boards)~~ ✅ | Completed 2026-06-12 — INCONCLUSIVE, data limitation (hot-money names missing from stock_history_ak). Rule kept. |
 | ~~6~~ | ~~Phase F (take-profit bands)~~ ✅ | Completed 2026-06-12 — MFE-based sweep, 8/15 kept. Wider bands (12/18, 12/20) show +15% simulation upside but optimistic — real time-stop cost not captured. |
@@ -626,7 +626,7 @@ Keep a change only if it works on the untouched half too.
 - **§3 Entry triggers**: (A) Pullback to 5/10-day MA, stabilize on volume; (B) Platform/prior-high
   breakout on ≥1.5x 5-day avg volume; (C) Strong-leader relay (open ±2%, vol at 10:30 ≥30% prior
   day, no new session low after 10:00) — half size, warm-up only.
-- **§4 Exit**: Dual trigger — time stop (day-5 gain <+2% → exit; breakout day-3 <+2% → exit;
+- **§4 Exit**: Dual trigger — time stop (day-5 gain <+2% → exit; day-10 unconditional)
   day-10 unconditional) OR price stop (max(5%, 1.0× 10d ATR) capped at 10%). Take-profit:
   +8% to +15% scale out; >+10% trail to 5-day MA.
 - **§5 Position sizing**: 2-slot concentrated (~25K each), full 50K deployable. Liquidity:
@@ -817,7 +817,7 @@ python northbound_check.py --scan --min-outflow 5000
 |-------|--------|-------------|
 | A — Gate | ✅ | AMBER → 1 slot max |
 | B — ATR stop | ✅ | Unified 1.0× all boards |
-| C — Time stop | ✅ | Day-3 breakout at +2% kept (70.3% pass) |
+| C — Time stop | ✅ | Day-5 +2% (recalibrated 2026-06-13, was day-3) |
 | D — Expectancy | ✅ | 53% win, 1.53R avg, +¥32K net — clears §6 targets |
 | E — 5+ board exclusion | ✅ | Rule kept (INCONCLUSIVE — data gap for hot-money small caps) |
 | F — Take-profit bands | ✅ | 8/15 kept. Wider bands show +15% sim upside but optimistic |

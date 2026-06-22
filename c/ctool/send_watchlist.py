@@ -261,11 +261,27 @@ def main():
     md = build_md(gate, top3, backups)
     print(md[:500])
 
-    # Write to c/cwatch.md
-    cwatch_path = os.path.join(HERE, '..', 'cwatch.md')
-    with open(cwatch_path, 'w') as f:
-        f.write(md)
-    print(f"cwatch.md written ({cwatch_path})")
+    # Write scan section into c/chold.md, preserving holdings below SCAN_END
+    chold_path = os.path.join(HERE, '..', 'chold.md')
+    scan_block = f"<!-- SCAN_START -->\n{md}\n<!-- SCAN_END -->"
+    try:
+        with open(chold_path, 'r', encoding='utf-8') as f:
+            existing = f.read()
+    except FileNotFoundError:
+        existing = ""
+    if "<!-- SCAN_START -->" in existing and "<!-- SCAN_END -->" in existing:
+        import re
+        new_content = re.sub(
+            r"<!-- SCAN_START -->.*?<!-- SCAN_END -->",
+            scan_block,
+            existing,
+            flags=re.DOTALL,
+        )
+    else:
+        new_content = scan_block + "\n\n" + existing
+    with open(chold_path, 'w', encoding='utf-8') as f:
+        f.write(new_content)
+    print(f"chold.md scan section updated ({chold_path})")
 
     print("=== Send ===")
     send_email(md)
