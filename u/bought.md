@@ -12,6 +12,6 @@ $482.5 已经卖出
 卖出：\~\$350 × 8 ≈ \$2,800
 已实现盈利：+\$173 USD ≈ AUD +\$266
 
-Bought LRCX at 397 4 shares, set sell stop at 352,
+Bought LRCX at 397 4 shares, set sell stop at 362,
 
 
