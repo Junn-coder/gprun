@@ -43,6 +43,6 @@ Validation order:
 - read_html drops leading zeros on codes → always `.zfill(6)`.
 
 ## Reference files
-- Strategy: `c/framed.md` (§1 gate, §2 cap, §3 entries, §4 exits, §5 sizing).
-- Hot sectors: `c/hota.md`. Workflow: `c/steps.md`, prompt: `c/cprompt.md`.
+- Strategy: `c/main/framed.md` (§1 gate, §2 cap, §3 entries, §4 exits, §5 sizing).
+- Hot sectors: `c/main/hota.md`. Workflow: `c/main/steps.md`, prompt: `c/main/cprompt.md`.
 - Gate backtest (done): `tool/gate_backtest.py` → 2025: 78 GREEN / 69 AMBER / 96 RED.

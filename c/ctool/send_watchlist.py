@@ -261,8 +261,8 @@ def main():
     md = build_md(gate, top3, backups)
     print(md[:500])
 
-    # Write scan section into c/chold.md, preserving holdings below SCAN_END
-    chold_path = os.path.join(HERE, '..', 'chold.md')
+    # Write scan section into c/main/chold.md, preserving holdings below SCAN_END
+    chold_path = os.path.join(HERE, '..', 'main', 'chold.md')
     scan_block = f"<!-- SCAN_START -->\n{md}\n<!-- SCAN_END -->"
     try:
         with open(chold_path, 'r', encoding='utf-8') as f:

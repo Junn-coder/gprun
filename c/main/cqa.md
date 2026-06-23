@@ -667,10 +667,10 @@ Keep a change only if it works on the untouched half too.
   4. Verify: `python tool/cn_stock.py <code> --history` + framed §3 trigger check.
   5. Size + stop: ~25K per slot; ATR stop (§4A); liquidity ≤1% of 10d avg turnover.
   6. Probe entry: Half position first; add second half only on next-day confirmation.
-  7. Record + plan: Update `c/chold.md`; write next-day management plan per framed §6.
+  7. Record + plan: Update `c/main/chold.md`; write next-day management plan per framed §6.
   8. Mechanical management: Stop/take-profit/trail at close → next-open execution. Never
      average down; max 10 trading days.
-  9. Review + repeat: Re-run gate, update `c/watchlistd.md` (max 6), log violations
+  9. Review + repeat: Re-run gate, update `c/main/watchlistd.md` (max 6), log violations
      and missed entries.
 - **Tool chain**: `cn_stock.py` / `us_stock.py` (quotes + history, akshare 1.18.63), `scan_cn.py`
   (limit-up pool → sorted candidates with 市值✓/✗ flags, anti-ban design with disk cache).

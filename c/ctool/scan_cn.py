@@ -42,7 +42,7 @@ Output (in this order):
   3. Full leader breakdown per hot sector — for cross-checking.
 The full report is auto-saved to share_data/candidates_<date>.txt by default.
 Next step: feed the final shortlist into cn_stock.py --history to pull
-history, validate entries, then fill c/watchlistd.md.
+history, validate entries, then fill c/main/watchlistd.md.
 """
 
 import os
@@ -288,7 +288,7 @@ def render(date, df, sector_rank, hot, leaders_per_sector, final_picks):
               f"{int(r['broken_board_count']):>4d}{r['turnover_rate']:>7.1f}{(mv/1e8 if not pd.isna(mv) else 0):>12.1f}"
               f"  {cap_flag(mv)} {board_flag(r['board_count'])}")
     P("")
-    P("Next: take the final shortlist above -> python tool/cn_stock.py <code> --history to pull history -> validate entries -> fill c/watchlistd.md")
+    P("Next: take the final shortlist above -> python tool/cn_stock.py <code> --history to pull history -> validate entries -> fill c/main/watchlistd.md")
     return "\n".join(lines)
 
 

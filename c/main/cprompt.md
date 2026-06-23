@@ -1,8 +1,8 @@
 Background (read first, treat as my rules — don't re-derive them):
-- c/framed.md  — gate/select/entry/exit/size discipline (3 slots, ¥75K, cap 30-500亿)
-- c/hota.md    — hot-sector identification (sector-first, stock-second)
-- steps.md       — the step order (gate → scan → validate → size → manage)
-Read hota.md, framed.md, and chold.md and follow them in profit-seeking / offensive mode.
+- c/main/framed.md  — gate/select/entry/exit/size discipline (3 slots, ¥75K, cap 30-500亿)
+- c/main/hota.md    — hot-sector identification (sector-first, stock-second)
+- c/main/steps.md   — the step order (gate → scan → validate → size → manage)
+Read c/main/hota.md, c/main/framed.md, and c/main/chold.md and follow them in profit-seeking / offensive mode.
 
 Tools (RUN them, don't reason from memory):
 - ctool/index.py            — Layer-1 gate (GREEN/AMBER/RED: RED=空仓, AMBER=退潮2槽)
@@ -11,7 +11,7 @@ Tools (RUN them, don't reason from memory):
 - ctool/ca.py <code> --cost <price> — analyze from cached data: MAs, ATR, Stage, swing points, P&L (NO akshare)
   Workflow: cn_stock.py --history once → ca.py repeatedly. Prefer ca.py for all analysis.
 
-After running tools, write the output to c/watchlistd.md in this EXACT format:
+After running tools, write the output to c/main/watchlistd.md in this EXACT format:
 
 ```
 # watchlistd — Short-term swing watchlist (paired with framed.md)
@@ -57,4 +57,4 @@ Tone: terse, decisive, executable. Account & risk slice are in framed.md — don
 
 ==
 
-"Run the A-share session per framed.md + steps.md: gate, scan, validate, produce 0–3 buyable bullets with exact prices/shares/stops, then check chold.md holdings per §4. Write everything to c/watchlistd.md."
+"Run the A-share session per framed.md + steps.md: gate, scan, validate, produce 0–3 buyable bullets with exact prices/shares/stops, then check c/main/chold.md holdings per §4. Write everything to c/main/watchlistd.md."

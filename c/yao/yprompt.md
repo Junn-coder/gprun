@@ -1,7 +1,7 @@
 Background:
 - c/yao/yaolist.md — 25 妖股池 + 每日操作规则
 - c/yao/up.md — 全市场涨停统计 (>10次)
-- c/framed.md — 主线框架 (共用闸门 + ATR)
+- c/main/framed.md — 主线框架 (共用闸门 + ATR)
 
 Tools (RUN them):
 - c/ctool/index.py — Layer-1 gate (GREEN/AMBER/RED)
