@@ -57,4 +57,4 @@ Tone: terse, decisive, executable. Account & risk slice are in framed.md — don
 
 ==
 
-"Run the A-share session per framed.md + steps.md: gate, scan, validate, produce 0–3 buyable bullets with exact prices/shares/stops, then check c/main/chold.md holdings per §4. Write everything to c/main/watchlistd.md."
+"check today's date and Run the A-share session per framed.md + steps.md: gate, scan, validate, produce 0–3 buyable bullets with exact prices/shares/stops, then check c/main/chold.md holdings per §4. Write everything to c/main/watchlistd.md."
