@@ -449,6 +449,10 @@ Re-entry execution:
      no "I'll go heavy this time to get even".
 
 ----------------------------------------------------------------
+[10. 文档写作约定]
+----------------------------------------------------------------
+- 所有持仓/分析/战报中，股票必须同时写「代码 名称」，如 "002085 万丰奥威"。
+  不单独写代码。chold.md、watchlistd.md、所有输出均适用。
 [10. Offensive discipline (green light = pull the trigger — don't turn discipline into permanent cash)]
 ----------------------------------------------------------------
 A large chunk of this doc is about when not to act — that's the filter side.
