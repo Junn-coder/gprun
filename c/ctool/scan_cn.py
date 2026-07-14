@@ -14,8 +14,10 @@ Goal: resolve the "chicken-and-egg" problem — automatically produce a raw cand
   - Circuit-breaker backoff: on refusal (RemoteDisconnected / ConnectionError),
     take ONE long pause and ONE retry. Still fails -> give up; never hammer.
     Hammering is what gets you blacklisted.
-  - On-disk cache: each day's limit-up pool is saved to
-    share_data/scan_zt_<date>.csv, so repeated analysis does not hit the network.
+  - The live limit-up pool is fetched fresh every run (the intraday snapshot
+    changes through the session, so a cache would serve stale info). Each fetch is
+    saved to share_data/scan_zt_<date>.csv as a write-only audit record that is
+    never read back. On network failure the run errors out — no stale fallback.
   - Default inter-call sleep is 5s, tunable via --sleep. Slow is fine; getting
     blocked is not.
 
@@ -31,7 +33,6 @@ Usage:
     python scan_cn.py --final 8             # converge to 8 names instead of 6
     python scan_cn.py --date 20260526       # specify trading day
     python scan_cn.py --sleep 8             # slower, more stable
-    python scan_cn.py --no-cache            # force a fresh network fetch
     python scan_cn.py --out ""              # disable auto-save (stdout only)
     python scan_cn.py --out picks           # change basename -> share_data/picks_<date>.txt
 
@@ -119,31 +120,29 @@ def safe_fetch(label, fn, sleep_after, wait=15):
 # ------------------------------------------------------------------
 # Limit-up pool (the only required network request)
 # ------------------------------------------------------------------
-def load_zt_pool(date, outdir, sleep, use_cache):
+def load_zt_pool(date, outdir, sleep):
+    # Always fetch the live limit-up pool; the intraday snapshot changes through
+    # the session so a cached copy would serve stale/false info. On network
+    # failure safe_fetch returns None -> caller errors out (no fake fallback).
     os.makedirs(outdir, exist_ok=True)
     path = os.path.join(outdir, f"scan_zt_{date}.csv")
-    if use_cache and os.path.exists(path):
-        print(f"  v cache hit {path} (no network)")
-        df = pd.read_csv(path, dtype={"代码": str})
-    else:
-        df = safe_fetch(f"limit-up pool {date}", lambda: ak.stock_zt_pool_em(date=date), sleep)
-        if df is not None and not df.empty:
-            df.to_csv(path, index=False, encoding="utf-8")
+    df = safe_fetch(f"limit-up pool {date}", lambda: ak.stock_zt_pool_em(date=date), sleep)
     if df is not None and not df.empty:
+        df.to_csv(path, index=False, encoding="utf-8")   # write-only audit record; never read back
         df = df.rename(columns=COLUMN_MAP)
     return df
 
 
-def resolve_trading_date(arg_date, outdir, sleep, use_cache):
+def resolve_trading_date(arg_date, outdir, sleep):
     """If --date is given, use it. Otherwise walk back from today to the first
     trading day with data (max 4 days back)."""
     if arg_date:
-        return arg_date, load_zt_pool(arg_date, outdir, sleep, use_cache)
+        return arg_date, load_zt_pool(arg_date, outdir, sleep)
 
     d = datetime.now()
     for back in range(5):
         date = (d - timedelta(days=back)).strftime("%Y%m%d")
-        df = load_zt_pool(date, outdir, sleep, use_cache)
+        df = load_zt_pool(date, outdir, sleep)
         if df is None:
             return date, None                      # refused/errored: stop, do not keep probing other dates
         if not df.empty:
@@ -300,13 +299,12 @@ def main():
     ap.add_argument("--top", type=int, default=8, help="show top N hot sectors in the breakdown (default 8)")
     ap.add_argument("--leaders", type=int, default=4, help="show top N leaders per sector in the breakdown (default 4)")
     ap.add_argument("--final", type=int, default=6, help="size of the final shortlist (default 6)")
-    ap.add_argument("--no-cache", action="store_true", help="force fresh network fetch, ignore cache")
     ap.add_argument("--out", default="candidates", help="basename of the saved candidate list (share_data/<out>_<date>.txt); pass empty string to disable")
     ap.add_argument("--outdir", default=DEFAULT_OUTDIR)
     ap.add_argument("-q", "--quiet", action="store_true", help="suppress stdout report (file save still happens)")
     args = ap.parse_args()
 
-    date, df = resolve_trading_date(args.date, args.outdir, args.sleep, not args.no_cache)
+    date, df = resolve_trading_date(args.date, args.outdir, args.sleep)
     if df is None:
         print("\nERROR: limit-up pool fetch was refused or errored. Stopped per anti-block rule (no consecutive retries).")
         print("       Suggestion: run later, or raise --sleep, or switch network.")
