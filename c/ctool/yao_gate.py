@@ -8,13 +8,13 @@ Demon stocks often rally independently of the index; shutting them down on a
 routine 2% index drop (as index.py does) misses the point.
 
 Gate logic:
-  1. Pool limit-up count (yesterday): how many of the 25 yao-pool stocks hit
+  1. Pool limit-up count (yesterday): how many of the yao-pool stocks hit
      limit-up?  Source: akshare stock_zt_pool_em, filtered to the pool.
   2. Index extreme check: only care about a true crash (>3% on any major index).
      A 2% dip is normal noise for demon stocks — we ignore it.
   3. Output: GREEN / AMBER / RED, written to share_data/yao_gate_<date>.txt
 
-Pool codes are read from c/yao/yaolist.md (the 25-stock table).
+Pool codes are read from c/yao/yaolist.md (pool table).
 
 Dependencies: akshare, pandas (same as index.py / cn_stock.py)
 
@@ -91,7 +91,7 @@ def parse_yao_codes(path):
     if not codes:
         print("ERROR: no stock codes found in yaolist.md pool table")
         sys.exit(1)
-    return codes[:25]  # safety cap
+    return codes  # pool size is controlled by build_yao_pool.py
 
 
 # ------------------------------------------------------------------
@@ -197,26 +197,26 @@ def render(date_str, pool_codes, lu_count, lu_codes, crash_alerts):
         P("[Index extreme]  no crash (>3%) on any major index")
     P("")
 
-    # --- Gate decision ---
+    # --- Gate decision (Variant B: looser, backtest-verified) ---
     if crash_alerts:
         gate = "RED"
         why = "index crash >3% — demon stocks don't trade into a cliff"
-    elif lu_count == 0:
-        gate = "RED"
-        why = "pool cold: 0 limit-ups — no relay chain, stay out"
     elif lu_count >= 3:
         gate = "GREEN"
-        why = f"pool warm: {lu_count} limit-ups — hunt aggressively, pick up to 2"
-    else:  # 1-2
+        why = f"pool hot: {lu_count} limit-ups — hunt aggressively, pick up to 3"
+    elif lu_count >= 1:
+        gate = "GREEN"
+        why = f"pool warm: {lu_count} limit-up(s) — trade, max 2 picks"
+    else:  # 0 LU
         gate = "AMBER"
-        why = f"pool lukewarm: {lu_count} limit-up(s) — trade light, max 1 pick"
+        why = "pool quiet: 0 limit-ups — trade light, max 1 pick"
 
     P(f"[Verdict]  {gate}")
     P(f"  {why}")
     P("")
-    P("GREEN → yao pool is alive. Scan all 25, pick up to 2 candidates.")
-    P("AMBER → limited pool heat. Max 1 candidate, tighter size.")
-    P("RED   → 空仓. Pool cold or index crashing. Wait for next scan.")
+    P(f"GREEN → pool active. Scan all {len(pool_codes)}, pick up to 3 (3+ LU) or 2 (1-2 LU) candidates.")
+    P("AMBER → pool quiet (0 LU). Max 1 candidate. Market may still have heat elsewhere.")
+    P("RED   → 空仓. Index crash >3%. Wait for next scan.")
     return "\n".join(L)
 
 
